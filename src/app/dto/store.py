@@ -4,7 +4,7 @@ from dataclasses import dataclass
 class Store:
     id: int
     name: str
-    country_id: int    
+    country_id: int
 
 @dataclass
 class Cusisine:
