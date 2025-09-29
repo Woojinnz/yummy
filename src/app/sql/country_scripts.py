@@ -1,6 +1,12 @@
 import psycopg
-from dto.location import Country
-from utils.config import load_config
+from app.dto.location import Country
+from app.utils.config import load_config
+
+# CRUD
+# CREATE
+# READ
+# UPDATE
+# DELETE
 
 def insert_single_country(country: Country) -> int | None:
     """ INSERT a single country into the COUNTRY table """
@@ -25,8 +31,12 @@ def insert_single_country(country: Country) -> int | None:
         print(error)
     finally:
         return country_id
+    
+
 
 
 if __name__ == "__main__":
     country = Country(None, "New Zealand", "NZ")
-    print(insert_single_country(country))
+    id = insert_single_country(country)
+    if id:
+        print(id)

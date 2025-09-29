@@ -1,7 +1,7 @@
 import psycopg
-from dto.store import Store
-from utils.string_func import normalize_str
-from utils.config import load_config
+from app.dto.store import Store
+from app.utils.string_func import normalize_str
+from app.utils.config import load_config
 
 def insert_single_store(store: Store) -> int | None:
     """ INSERT a new STORE into the STORE table"""
@@ -33,4 +33,6 @@ def insert_single_store(store: Store) -> int | None:
 
 if __name__ == "__main__":
     store = Store( None , "woojins store", 1)
-    print(insert_single_store(store))
+    id = insert_single_store(store)
+    if id:
+        print(id)
