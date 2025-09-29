@@ -5,7 +5,7 @@ CREATE DATABASE "yummy";
 CREATE TABLE country (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
-    iso_code char(2),
+    iso_code char(2) UNIQUE,
     created_at timestamptz NOT NULL DEFAULT now()
 );
 
@@ -13,6 +13,7 @@ CREATE TABLE store (
     id  BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     country_id integer references country(id),
+    normalized_name VARCHAR(255) UNIQUE NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now()
 );
 
