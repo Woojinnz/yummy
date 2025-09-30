@@ -1,7 +1,7 @@
 import psycopg
-from app.dto.store import Store
-from app.utils.string_func import normalize_str
-from app.utils.config import load_config
+from app.database.dto.store import Store
+from app.database.utils.string_func import normalize_str
+from app.database.utils.config import load_config
 from typing import List
 
 def insert_single_store(store: Store) -> int | None:

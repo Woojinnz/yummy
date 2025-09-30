@@ -1,6 +1,6 @@
 import psycopg
-from app.dto.location import Country
-from app.utils.config import load_config
+from app.database.dto.location import Country
+from app.database.utils.config import load_config
 from typing import List
 
 def insert_single_country(country: Country) -> int | None:

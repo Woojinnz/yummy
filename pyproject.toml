@@ -12,6 +12,3 @@ where = ["src"]
 
 [tool.setuptools.package-dir]
 "" = "src"
-
-[project.scripts]
-country-scripts = "yummy.sql.country_scripts:main"
