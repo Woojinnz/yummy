@@ -46,6 +46,7 @@ CREATE TABLE item_image(
 CREATE TABLE cuisine(
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
+    normalized_name VARCHAR(255) UNIQUE,
     created_at timestamptz NOT NULL DEFAULT now()
 );
 
@@ -53,7 +54,8 @@ CREATE TABLE store_cuisines(
     id SERIAL PRIMARY KEY,
     store_id BIGINT references store(id),
     cuisine_id integer references cuisine(id),
-    created_at timestamptz NOT NULL DEFAULT now()
+    created_at timestamptz NOT NULL DEFAULT now(),
+    UNIQUE (store_id, cuisine_id)
 );
 
 CREATE TABLE users(
@@ -65,7 +67,6 @@ CREATE TABLE users(
     salt VARCHAR(9999), -- is this how its stored?
     email VARCHAR(255)
 );
-
 
 -- INDEXING FOR THE FUTURE IF REQUIRED
 

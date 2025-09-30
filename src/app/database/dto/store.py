@@ -7,6 +7,6 @@ class Store:
     country_id: int
 
 @dataclass
-class Cusisine:
+class Cuisine:
     id: int
     name: str
