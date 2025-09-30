@@ -1,5 +1,5 @@
 from app.database.dto.location import Country
-from app.database.utils.database import insert_single_sql, select_sql
+from app.utils.database import insert_single_sql, select_sql
 from typing import List
 
 def insert_single_country(country: Country) -> int | None:

@@ -1,7 +1,7 @@
 from app.database.dto.store import Store
-from app.database.utils.string_func import normalize_str
+from app.utils.string_func import normalize_str
+from app.utils.database import insert_single_sql, select_sql
 from typing import List
-from app.database.utils.database import insert_single_sql, select_sql
 
 def insert_single_store(store: Store) -> int | None:
     """ INSERT a new STORE into the STORE table"""

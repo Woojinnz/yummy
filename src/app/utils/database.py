@@ -1,5 +1,5 @@
 import psycopg
-from app.database.utils.config import load_config
+from app.utils.config import load_config
 from typing import List, TypeVar, Sequence, Type
 from psycopg.rows import class_row
 

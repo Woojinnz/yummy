@@ -1,6 +1,6 @@
 from app.database.dto.store import Cuisine
-from app.database.utils.string_func import normalize_str
-from app.database.utils.database import insert_single_sql, select_sql
+from app.utils.string_func import normalize_str
+from app.utils.database import insert_single_sql, select_sql
 from typing import List
 
 def insert_one_cuisine(c: Cuisine) -> int | None:
