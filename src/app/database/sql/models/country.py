@@ -6,7 +6,7 @@ def insert_single_country(country: Country) -> int | None:
     """ INSERT a single country into the COUNTRY table """
 
     sql = " INSERT INTO country (name, iso_code) VALUES (%s, %s) RETURNING id"
-    values = (country.name, country.iso_code)
+    values = (country.name, country.iso_code,)
     return insert_single_sql(sql, values)
 
     

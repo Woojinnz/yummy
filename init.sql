@@ -20,9 +20,11 @@ CREATE TABLE store (
 CREATE TABLE item(
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    -- potentially introduce an index on price
+    -- sort and filter by price
     price decimal,
-    description VARCHAR(9999),
-    created_at timestamptz NOT NULL DEFAULT now()
+    created_at timestamptz NOT NULL DEFAULT now(),
+    UNIQUE (name, price)
 );
 
 CREATE TABLE store_items(
