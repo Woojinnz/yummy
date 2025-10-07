@@ -1,11 +1,9 @@
 import psycopg
 from app.utils.config import load_config
-from typing import List, TypeVar, Sequence, Type
+from typing import Sequence, Any, LiteralString
 from psycopg.rows import class_row
 
-T = TypeVar('T')
-
-def insert_single_sql(sql: str, values: Sequence[object]) -> int | None:
+def insert_single_sql(sql: LiteralString, values: Sequence[Any]) -> int | None:
 
     id = None
     config = load_config()
@@ -26,16 +24,17 @@ def insert_single_sql(sql: str, values: Sequence[object]) -> int | None:
     finally:
         return id
     
-def select_sql(sql: str, values: Sequence[object], cls: Type[T]) -> List[T]:
+def select_sql[T](sql: LiteralString, values: Sequence[Any], cls: type[T]) -> list[T]:
 
+    rows: list[T] = []
     config = load_config()
 
     try:
-        with psycopg.connect(**config, row_factory=class_row(cls)) as conn:
-            with conn.cursor() as cur:
+        with psycopg.connect(**config) as conn:
+            with conn.cursor(row_factory=class_row(cls)) as cur:
                 cur.execute(sql, values)
-                return cur.fetchall()
+                rows = cur.fetchall()
 
-    except (Exception, psycopg.DatabaseError) as error:
+    except (psycopg.DatabaseError) as error:
         print(error)
-        return []
+    return rows
