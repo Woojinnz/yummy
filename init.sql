@@ -17,23 +17,41 @@ CREATE TABLE store (
     created_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE item(
+CREATE TABLE users(
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    -- potentially introduce an index on price
-    -- sort and filter by price
-    price decimal,
-    created_at timestamptz NOT NULL DEFAULT now(),
-    UNIQUE (name, price)
+    username VARCHAR(255) UNIQUE NOT NULL,
+    default_country integer NOT NULL references country(id),
+    password VARCHAR(255), -- need to add hash and salt, not a thing yet
+    salt VARCHAR(9999), -- is this how its stored?
+    email VARCHAR(255)
+);
+
+CREATE TABLE item(
+    -- item is a global item, so ice cream is just the existence of ice cream not connected to anything.
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    normalized_name VARCHAR(255) UNIQUE NOT NULL,
+    created_by BIGINT references users(id),
+    created_at timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE TABLE store_items(
     id BIGSERIAL PRIMARY KEY,
-    store_id BIGINT references store(id) ON DELETE CASCADE,
-    item_id BIGINT references item(id) ON DELETE CASCADE,
-    -- UNIQUE creates an index on left column (store_id)
-    -- Helps for searching for all rows with store_id x
+    store_id BIGINT NOT NULL references store(id) ON DELETE CASCADE ,
+    item_id BIGINT NOT NULL references item(id) ON DELETE CASCADE,
+    price DECIMAL,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    -- A store can only have one row for a given item
     UNIQUE (store_id, item_id)
+);
+
+create TABLE item_review(
+    id BIGSERIAL PRIMARY KEY,
+    store_item_id BIGINT references store_items(id),
+    description VARCHAR(9999),
+    stars int NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE TABLE item_image(
@@ -60,15 +78,6 @@ CREATE TABLE store_cuisines(
     UNIQUE (store_id, cuisine_id)
 );
 
-CREATE TABLE users(
-    id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    username VARCHAR(255) UNIQUE NOT NULL,
-    default_country integer NOT NULL references country(id),
-    password VARCHAR(255), -- need to add hash and salt, not a thing yet
-    salt VARCHAR(9999), -- is this how its stored?
-    email VARCHAR(255)
-);
 
 -- INDEXING FOR THE FUTURE IF REQUIRED
 

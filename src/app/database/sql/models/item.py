@@ -1,33 +1,21 @@
 from app.database.dto.item import Item
+from app.database.dto.user import User
 from app.utils.database import insert_single_sql, select_sql
 from typing import Sequence
+from app.utils.string_func import normalize_str
 
-def insert_one_item(i: Item) -> int | None:
+def insert_one_item(i: Item, user_id: int) -> int | None:
     """  
         INSERT one menu item into the item table, 
-        doesnt necessarily need to be linked to a menu  
+        doesnt necessarily need to be linked to a store,
+
+        This is a GLOBAL item
     """
 
-    # check if (name, price,) tuple exists
-    # if so that means we just need to add a new description field for this entry
-    
-    # the tuple matching means that there already exists an entry for this name and price.
+    normalized_str = normalize_str(i.name)
 
-    # does this makes sense?
-    # that is how i am going to check for items that are the same
-
-    # i guess similar shops can sell the exact same thing?
-    
-    # one edge case
-    # store A sells (ice cream, 50)
-    # store B sells (ice cream, 50)
-    # obviously store A and store B will have different reviews.
-    
-
-    sql = """ INSERT INTO item (name, price) VALUES (%s,%s) RETURNING id"""
-    values = (i.name, i.price)
-
-    # need to create a new row entry in item_description to add description for the item
+    sql = """ INSERT INTO item (name, normalized_name, created_by) VALUES (%s,%s, %s) RETURNING id"""
+    values = (i.name, normalized_str, user_id,)
 
     return insert_single_sql(sql,values)
 
@@ -45,8 +33,9 @@ def get_all_items_name_match(name: str) -> Sequence[Item]:
     
 
 if __name__ == "__main__":
-    item = Item(None, "Roasted Goose", 50.01, "Some roasted goose")
+    item = Item(None, "Roasted Goose")
+    user = User(1, "Woojin", "wj", 0, "1234", "")
 
-    id = insert_one_item(item)
+    id = insert_one_item(item, None)
     if id:
         print(id)

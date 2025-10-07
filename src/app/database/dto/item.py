@@ -5,8 +5,6 @@ from typing import Optional
 class Item:
     id: int | None
     name: str
-    price: float
-    desc: str
 
 @dataclass
 class ItemImage:
