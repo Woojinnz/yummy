@@ -9,13 +9,13 @@ class Item:
 @dataclass
 class ItemImage:
     id: int | None
-    store_item_id: int
-    url: str
+    image_url: str
     is_primary: bool
     position: int
 
 @dataclass
 class ItemReview:
     id: int | None
+    user_id: int
     description: str
     stars: int

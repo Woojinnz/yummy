@@ -36,7 +36,7 @@ def get_stores_for_cuisine(c: Cuisine) -> List[Store]:
     """
     
     values = (normalized_cuisine,)
-    return(select_sql(sql,values, Store))
+    return select_sql(sql,values, Store)
 
 def add_item_to_store(s: Store, i:Item, p: float) -> int | None:
     """ INSERT one row mapping of store and item to the store_items table"""
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     store = Store(None, "woojin", 1)
     cuisine = Cuisine(None, "chinese")
-    item = Item(None, "dumplings")
+    item = Item(None, "Roasted Goose")
 
     add_cusisine_id = add_cuisine_to_store(store, cuisine)
     add_item_id = add_item_to_store(store, item, 10.00)

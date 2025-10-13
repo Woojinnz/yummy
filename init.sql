@@ -51,7 +51,7 @@ create TABLE item_review(
     store_item_id BIGINT NOT NULL references store_items(id) ON DELETE CASCADE,
     user_id BIGINT NOT NULL references users(id) ON DELETE CASCADE,
     description VARCHAR(9999),
-    stars int NOT NULL,
+    stars DECIMAL NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now()
 );
 
@@ -63,6 +63,38 @@ CREATE TABLE item_image(
     is_primary BOOLEAN NOT NULL DEFAULT false,
     position INT NOT NULL DEFAULT 1
 );
+
+ALTER TABLE item_image
+  ADD CONSTRAINT item_image_unique_position_per_item
+  UNIQUE (store_item_id, position);
+
+ALTER TABLE item_image
+  ADD CONSTRAINT item_image_position_positive CHECK (position >= 1);
+
+CREATE OR REPLACE FUNCTION item_image_enforce_single_primary()
+RETURNS trigger AS $$
+BEGIN
+  IF NEW.is_primary THEN
+    UPDATE item_image
+       SET is_primary = FALSE
+     WHERE store_item_id = NEW.store_item_id
+       AND id <> COALESCE(NEW.id, -1)
+       AND is_primary = TRUE;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_item_image_single_primary
+BEFORE INSERT OR UPDATE OF is_primary, store_item_id
+ON item_image
+FOR EACH ROW
+EXECUTE FUNCTION item_image_enforce_single_primary();
+
+
+CREATE UNIQUE INDEX item_image_one_primary_per_store_item
+ON item_image (store_item_id)
+WHERE is_primary;
 
 CREATE TABLE cuisine(
     id SERIAL PRIMARY KEY,
