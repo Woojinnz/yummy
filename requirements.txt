@@ -3,3 +3,4 @@ psycopg-binary==3.2.10
 psycopg-pool==3.2.6
 typing_extensions==4.15.0
 -e git+https://github.com/Woojinnz/yummy.git@447e9a7046ca507d250f4ab6adcf5d314699749b#egg=yummy
+fastapi[standard]==0.119.0
