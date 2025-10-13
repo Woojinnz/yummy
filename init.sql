@@ -12,7 +12,7 @@ CREATE TABLE country (
 CREATE TABLE store (
     id  BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    country_id integer references country(id),
+    country_id integer references country(id) NOT NULL,
     normalized_name VARCHAR(255) UNIQUE NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now()
 );
@@ -48,7 +48,8 @@ CREATE TABLE store_items(
 
 create TABLE item_review(
     id BIGSERIAL PRIMARY KEY,
-    store_item_id BIGINT references store_items(id),
+    store_item_id BIGINT NOT NULL references store_items(id) ON DELETE CASCADE,
+    user_id BIGINT NOT NULL references users(id) ON DELETE CASCADE,
     description VARCHAR(9999),
     stars int NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now()
@@ -56,7 +57,7 @@ create TABLE item_review(
 
 CREATE TABLE item_image(
     id BIGSERIAL PRIMARY KEY,
-    item_id BIGINT references item(id) ON DELETE CASCADE,
+    store_item_id BIGINT NOT NULL references store_items(id) ON DELETE CASCADE,
     image_url VARCHAR(9999),
     created_at timestamptz NOT NULL DEFAULT now(),
     is_primary BOOLEAN NOT NULL DEFAULT false,

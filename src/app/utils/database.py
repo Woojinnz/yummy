@@ -18,10 +18,10 @@ def insert_single_sql(sql: LiteralString, values: Sequence[Any]) -> int | None:
                     id = rows[0]
 
                 conn.commit()
+                return id
 
     except (Exception, psycopg.DatabaseError) as error:
         print(error)
-    finally:
         return id
     
 def select_sql[T](sql: LiteralString, values: Sequence[Any], cls: type[T]) -> list[T]:
