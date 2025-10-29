@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Login Demo</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 2rem; }
+      button, a { padding: .6rem 1rem; border-radius: .5rem; border: 1px solid #ccc; text-decoration: none; cursor: pointer; }
+      .row { display: flex; gap: 1rem; margin-bottom: 1rem; }
+      #userBox { padding: 1rem; border: 1px solid #eee; border-radius: .75rem; }
+      code { background: #f6f6f6; padding: .1rem .3rem; border-radius: .3rem; }
+    </style>
+  </head>
+  <body>
+    <h1>Google Sign-in</h1>
+
+    <div class="row">
+      <a href="/auth/google/login">Login with Google</a>
+      <button id="logoutBtn" type="button">Logout</button>
+    </div>
+
+    <div id="userBox">
+      <strong>Status:</strong> <span id="status">Checking…</span>
+      <pre id="profile" style="white-space:pre-wrap"></pre>
+    </div>
+
+    <script>
+      async function fetchMe() {
+        try {
+          const res = await fetch('/me', { credentials: 'include' });
+          if (!res.ok) throw new Error('not authenticated');
+          const data = await res.json();
+          document.getElementById('status').textContent = 'Logged in';
+          document.getElementById('profile').textContent = JSON.stringify(data, null, 2);
+        } catch {
+          document.getElementById('status').textContent = 'Logged out';
+          document.getElementById('profile').textContent = '';
+        }
+      }
+
+      async function logout() {
+        await fetch('/auth/google/logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+        location.reload();
+      }
+
+      document.getElementById('logoutBtn').addEventListener('click', logout);
+      fetchMe();
+    </script>
+  </body>
+</html>

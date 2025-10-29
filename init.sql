@@ -19,12 +19,11 @@ CREATE TABLE store (
 
 CREATE TABLE users(
     id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    username VARCHAR(255) UNIQUE NOT NULL,
-    default_country integer NOT NULL references country(id),
-    password VARCHAR(255), -- need to add hash and salt, not a thing yet
-    salt VARCHAR(9999), -- is this how its stored?
-    email VARCHAR(255)
+    google_sub: VARCHAR(255) UNIQUE,
+    email: VARCHAR(255) UNIQUE NOT NULL,
+    name: VARCHAR(255) NOT NULL,
+    picture: VARCHAR(9999),
+    created_at timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE TABLE item(
